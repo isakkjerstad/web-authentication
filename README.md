@@ -16,12 +16,12 @@ All API endpoints should return HTML documents.
 - Username is already taken.
 - Password verification fails.
 - Password is of insufficient strength.
-#### Frameworks:
+### Frameworks:
 - Python 3.
 - Flask.
 - Bcrypt.
 - OpenSSL + Let's Encrypt.
-#### Sources:
+### Sources:
 - [Flask](https://flask.palletsprojects.com/en/2.2.x/).
 - [Secure Password Hashing](https://security.blogoverflow.com/2013/09/about-secure-password-hashing/).
 - [pyCryptoDome](https://pycryptodome.readthedocs.io/en/latest/).

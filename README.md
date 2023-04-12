@@ -9,8 +9,8 @@ In addition the following requirements must be achieved:
 - Log authentication requests.
 ## Endpoints:
 - "/" (GET) - welcome message, username of a logged-in user, a link to the register and login page.
-- "/register" (GET, PUT) - form for adding new users, username and password w. verification + errors.
-- "/login" (GET, PUT) - username, password and redirect to "/" on successful login.
+- "/register" (GET, POST) - form for adding new users, username and password w. verification + errors.
+- "/login" (GET, POST) - username, password and redirect to "/" on successful login.
 All API endpoints should return HTML documents.
 ### Error messages:
 - Username is already taken.

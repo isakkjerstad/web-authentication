@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Assignment four in INF-2310 Computer Security at UiT.">
+    <meta name="author" content="Isak Kjerstad">
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+  </head>
+  <body>
+    {% block main %}{% endblock %}
+  </body>
+</html>

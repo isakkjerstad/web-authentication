@@ -15,8 +15,12 @@
         <div class="center">
             <!-- Navigation bar. -->
             <div class="navbar">
+                <ul>
+                    <li><a class="{{ 'active' if active_page is not defined else 'inactive' }}" href="/">Home</a></li>
+                    <li><a class="{{ 'active' if active_page == 'login' else 'inactive' }}" href="/login">Log In</a></li>
+                    <li><a class="{{ 'active' if active_page == 'register' else 'inactive' }}" href="/register">Register</a></li>
+                </ul>
             </div>
-
             <!-- Extend base with content in main. -->
             {% block main %}{% endblock %}
         </div>

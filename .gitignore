@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # Database
-users.db
+db.sqlite3

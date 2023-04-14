@@ -3,7 +3,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from .config import DATABASE_NAME
-from os import path
+from os import path, remove
 
 database = SQLAlchemy()
 
@@ -34,3 +34,13 @@ def create_database(web_app):
 
     if not path.exists(__name__ + "/" + DATABASE_NAME):
         database.create_all(app = web_app)
+        print(" * Database created!")
+
+def delete_database():
+    ''' Deletes the database if it exists. '''
+
+    database_path = __name__ + "/" + DATABASE_NAME
+    
+    if path.exists(database_path):
+        remove(database_path)
+        print(" * Database deleted!")

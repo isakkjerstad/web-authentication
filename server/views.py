@@ -1,7 +1,11 @@
 #!/usr/bin/python3
 
-from flask import Blueprint, request, render_template, flash
-from .config import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
+from flask import Blueprint, request, render_template, flash, url_for, redirect
+from . import database as db
+from .models import User
+from sqlalchemy import exc
+from .config import USRNAME_MIN_LEN, USRNAME_MAX_LEN, MIN_PASSWD_LEN, DISALLOWED_PASSWORD_LIST_PATH, HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR
+import json
 
 views = Blueprint("views", __name__)
 
@@ -9,11 +13,15 @@ views = Blueprint("views", __name__)
 def index():
     ''' Default landing page. '''
 
+    # TODO: Display user information + extras!
+
     return render_template("index.html")
 
 @views.route("/register", methods = ["GET", "POST"])
 def register():
     ''' User registration page. '''
+
+    REGISTER_TEMPLATE = "register.html"
 
     if request.method == "POST":
 
@@ -21,19 +29,76 @@ def register():
         password = request.form["password"]
         confirm_password = request.form["confirm-password"]
 
-        flash("Testing the flash system!", "error")
-        flash("Testing the flash system!", "success")
-        return render_template("register.html"), HTTP_400_BAD_REQUEST
+        # Validate username according to the database rules.
+        if len(username) < USRNAME_MIN_LEN or len(username) > USRNAME_MAX_LEN:
+            flash("Invalid username!", "error")
+            return render_template(REGISTER_TEMPLATE), HTTP_400_BAD_REQUEST
 
+        # Validate matching passwords.
+        if password != confirm_password:
+            flash("Passwords does not match!", "error")
+            return render_template(REGISTER_TEMPLATE), HTTP_400_BAD_REQUEST
+
+        # Check the password length.
+        if len(password) < MIN_PASSWD_LEN:
+            flash(f"Password must be at least {MIN_PASSWD_LEN} characters long!", "error")
+            return render_template(REGISTER_TEMPLATE), HTTP_400_BAD_REQUEST
+        
+        try:
+            # Check that the requested password is not a common and pwned password.
+            with open(DISALLOWED_PASSWORD_LIST_PATH, "rb") as disallowed_password_file:
+
+                disallowed_passwords = json.load(disallowed_password_file)
+                
+                for disallowed_password in disallowed_passwords:
+                    if password == disallowed_password:
+                        flash(f"Password is too common!", "error")
+                        return render_template(REGISTER_TEMPLATE), HTTP_400_BAD_REQUEST
+
+        except FileNotFoundError:
+            pass
+
+        # Create the new user to add in the database, hash the password.
+
+        # TODO: Hash the password!
+        # TODO: ... maybe add active field (never logged in)?
+
+        new_user = User(username = username, password_hash = password)
+
+        try:
+            # Attempt to add new user.
+            db.session.add(new_user)
+            db.session.flush()
+        except exc.IntegrityError:
+            # Username already taken.
+            db.session.rollback()
+            flash(f"Username '{username}' is already taken!", "error")
+            return render_template(REGISTER_TEMPLATE), HTTP_400_BAD_REQUEST
+        except exc.SQLAlchemyError:
+            # Catch general database errors.
+            db.session.rollback()
+            flash("Failed to create a new user, please try again!", "error")
+            return render_template(REGISTER_TEMPLATE), HTTP_500_INTERNAL_SERVER_ERROR
+        else:
+            # Success, new user can be added.
+            db.session.commit()
+
+        flash("New user created successfully!", "success")
+        return redirect(url_for("views.login"))
+
+    # Present registration form on a GET request.
     return render_template("register.html")
 
 @views.route("/login", methods = ["GET", "POST"])
 def login():
-    ''' User login page. '''
+    ''' User log in page. '''
 
     if request.method == "POST":
 
         username = request.form["username"]
         password = request.form["password"]
 
+        # TODO: Implement log in!
+
+    # Present log in form on a GET request.
     return render_template("login.html")

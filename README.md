@@ -26,3 +26,4 @@ All API endpoints should return HTML documents.
 - [Secure Password Hashing](https://security.blogoverflow.com/2013/09/about-secure-password-hashing/).
 - [pyCryptoDome](https://pycryptodome.readthedocs.io/en/latest/).
 - [Flash w. Flask](https://flask.palletsprojects.com/en/2.2.x/patterns/flashing/).
+- [PwnedPasswordsTop100k](https://www.ncsc.gov.uk/static-assets/documents/PwnedPasswordsTop100k.json).

@@ -2,17 +2,21 @@
 
 <html lang="en">
     <head>
+        <!-- Site wide metadata. -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Assignment four in INF-2310 Computer Security at UiT.">
         <meta name="author" content="Isak Kjerstad">
 
+        <!-- Dynamic site title. -->
         <title>{% block title %}{% endblock %}</title>
-
+        
+        <!-- Load static resources. -->
         <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
     </head>
     <body>
         <div class="center">
+
             <!-- Navigation bar. -->
             <div class="navbar">
                 <ul>
@@ -21,8 +25,21 @@
                     <li><a class="{{ 'active' if active_page == 'register' else 'inactive' }}" href="/register">Register</a></li>
                 </ul>
             </div>
+
+            <!-- Flashed messages (class flash-error/flash-success). -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-{{ category }}">
+                            <h1>{{ message }}</h1>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
             <!-- Extend base with content in main. -->
             {% block main %}{% endblock %}
+            
         </div>
     </body>
 </html>

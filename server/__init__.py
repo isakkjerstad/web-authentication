@@ -13,6 +13,7 @@ def create_web_app():
 
     # Flask configuration.
     web_app.config.update(
+        SECRET_KEY = "HWiZ7Ft3fTy9Y54enng2PgnUcmqBFNVo",
         SEND_FILE_MAX_AGE_DEFAULT = 0,
         SQLALCHEMY_DATABASE_URI = f"sqlite:///{DATABASE_NAME}",
         SQLALCHEMY_TRACK_MODIFICATIONS = False,

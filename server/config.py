@@ -7,3 +7,7 @@ DATABASE_NAME = "db.sqlite3"
 DEBUG = True
 THREADED = True
 PORT = 8080
+
+# HTTP error codes.
+HTTP_201_CREATED = 201
+HTTP_400_BAD_REQUEST = 400

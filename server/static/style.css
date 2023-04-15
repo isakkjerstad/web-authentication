@@ -10,13 +10,37 @@ body {
     flex-direction: column;
 }
 
+.flash-error {
+    width: 400px;
+    font-size: 60%;
+    text-align: center;
+    background-color: #B00020;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0px 0px 20px 12px #171717;
+    margin-bottom: 20px;
+}
+
+.flash-success {
+    width: 400px;
+    font-size: 60%;
+    text-align: center;
+    background-color: #068c6b;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0px 0px 20px 12px #171717;
+    margin-bottom: 20px;
+}
+
 .forms {
     width: 400px;
     text-align: center;
     background-color: #121212;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 15px;
-    box-shadow: 0px 0px 20px 12px #171717;;
+    box-shadow: 0px 0px 20px 12px #171717;
+    border-style: solid;
+    border-width: 1px;
 }
 
 .forms label {

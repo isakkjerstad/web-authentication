@@ -27,3 +27,4 @@ All API endpoints should return HTML documents.
 - [pyCryptoDome](https://pycryptodome.readthedocs.io/en/latest/).
 - [Flash w. Flask](https://flask.palletsprojects.com/en/2.2.x/patterns/flashing/).
 - [PwnedPasswordsTop100k](https://www.ncsc.gov.uk/static-assets/documents/PwnedPasswordsTop100k.json).
+- [Bcrypt Docs](https://pycryptodome.readthedocs.io/en/latest/src/protocol/kdf.html).

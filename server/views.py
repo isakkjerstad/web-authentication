@@ -4,8 +4,11 @@ from flask import Blueprint, request, render_template, flash, url_for, redirect
 from . import database as db
 from .models import User
 from sqlalchemy import exc
-from .config import USRNAME_MIN_LEN, USRNAME_MAX_LEN, MIN_PASSWD_LEN, DISALLOWED_PASSWORD_LIST_PATH, HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR
+from .config import USRNAME_MIN_LEN, USRNAME_MAX_LEN, MIN_PASSWD_LEN, DISALLOWED_PASSWORD_LIST_PATH, HASH_COST, HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR
 import json
+from Crypto.Protocol.KDF import bcrypt
+from Crypto.Hash import SHA256
+from base64 import b64encode
 
 views = Blueprint("views", __name__)
 
@@ -57,13 +60,17 @@ def register():
 
         except FileNotFoundError:
             pass
+        
+        try:
+            # Hash the password using bcrypt. Accept all password lengths.
+            length_insensitive_password = b64encode(SHA256.new(password.encode()).digest())
+            bcrypt_password_hash = bcrypt(length_insensitive_password, HASH_COST)
+        except ValueError:
+            flash(f"Invalid password!", "error")
+            return render_template(REGISTER_TEMPLATE), HTTP_400_BAD_REQUEST
 
-        # Create the new user to add in the database, hash the password.
-
-        # TODO: Hash the password!
-        # TODO: ... maybe add active field (never logged in)?
-
-        new_user = User(username = username, password_hash = password)
+        # Create the new user to add in the database.
+        new_user = User(username = username, password_hash = bcrypt_password_hash)
 
         try:
             # Attempt to add new user.

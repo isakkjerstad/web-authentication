@@ -33,15 +33,14 @@ def create_web_app():
 def create_database(web_app):
     ''' Create a new database if non-existent. '''
 
-    if not path.exists(__name__ + "/" + DATABASE_NAME):
-        with web_app.app_context():
-            database.create_all()
-            print(" * Database created!")
+    with web_app.app_context():
+        database.create_all()
+        print(" * Initialized database!")
 
 def delete_database():
     ''' Deletes the database if it exists. '''
 
-    database_path = __name__ + "/" + DATABASE_NAME
+    database_path = "instance/" + DATABASE_NAME
     
     if path.exists(database_path):
         remove(database_path)

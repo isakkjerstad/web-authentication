@@ -135,6 +135,11 @@ def login():
         # Success, set user session.
         session['user-id'] = user.uuid
 
+        # Set user as active.
+        if user.activated != True:
+            user.activated = True
+            db.session.commit()
+
         flash(f"Logged in as: {user.username}", "success")
         return redirect(url_for("views.index"))
 

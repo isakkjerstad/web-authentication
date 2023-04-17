@@ -8,4 +8,5 @@ class User(db.Model):
 
     uuid = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(USRNAME_MAX_LEN), nullable = False, unique = True)
+    activated = db.Column(db.Boolean(), default = False)
     password_hash = db.Column(db.BINARY(60), nullable = False)

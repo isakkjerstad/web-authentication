@@ -34,7 +34,7 @@
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="flash-{{ category }}">
+                        <div class="flash-{{ category }} auto-hide">
                             <h1>{{ message }}</h1>
                         </div>
                     {% endfor %}

@@ -32,6 +32,11 @@ body {
     margin-bottom: 20px;
 }
 
+.auto-hide {
+    animation: fade 3s forwards, hide 0s forwards;
+    animation-delay: 7s, 10s;
+}
+
 .forms {
     width: 400px;
     text-align: center;
@@ -100,6 +105,22 @@ h1 span {
 
     100%    {
         color: #FE0E00;
+    }
+}
+
+@keyframes fade {
+    0%      { opacity: 1; }
+    100%    { opacity: 0; }
+}
+
+@keyframes hide {
+    to {
+        visibility: hidden;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+        width: 0;
+        height: 0;
     }
 }
 

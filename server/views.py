@@ -9,6 +9,7 @@ import json
 from Crypto.Protocol.KDF import bcrypt, bcrypt_check
 from Crypto.Hash import SHA256
 from base64 import b64encode
+from werkzeug.exceptions import BadRequestKeyError
 
 views = Blueprint("views", __name__)
 
@@ -36,9 +37,14 @@ def register():
 
     if request.method == "POST":
 
-        username = request.form["username"]
-        password = request.form["password"]
-        confirm_password = request.form["confirm-password"]
+        try:
+            # Get user input from form.
+            username = request.form["username"]
+            password = request.form["password"]
+            confirm_password = request.form["confirm-password"]
+        except BadRequestKeyError:
+            flash("Invalid form!", "error")
+            return render_template(REGISTER_TEMPLATE), HTTP_400_BAD_REQUEST
 
         # Validate username according to the database rules.
         if len(username) < USRNAME_MIN_LEN or len(username) > USRNAME_MAX_LEN:
@@ -113,8 +119,13 @@ def login():
 
     if request.method == "POST":
 
-        username = request.form["username"]
-        password = request.form["password"]
+        try:
+            # Get user input from form.
+            username = request.form["username"]
+            password = request.form["password"]
+        except BadRequestKeyError:
+            flash("Invalid form!", "error")
+            return render_template(LOGIN_TEMPLATE), HTTP_400_BAD_REQUEST
 
         # Retrieve the user, or None if non-existent.
         user = User.query.filter_by(username = username).first()

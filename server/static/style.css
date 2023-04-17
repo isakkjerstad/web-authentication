@@ -75,6 +75,34 @@ body {
     width: 50%;
 }
 
+h1 span {
+    animation: rainbow 5s infinite;
+    font-family: cursive;
+    font-size: 110%;
+}
+
+@keyframes rainbow {
+    0%	    {
+        color: #FE0E00;
+    }
+
+    25%	    {
+        color: #FEF900;
+    }
+
+    50%    {
+        color: #1B8D00;
+    }
+
+    75%    {
+        color: #0025B5;
+    }
+
+    100%    {
+        color: #FE0E00;
+    }
+}
+
 /* Navbar styling inspired by the following source (14.04.23):
  * https://www.w3schools.com/css/css_navbar_horizontal.asp
 */

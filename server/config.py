@@ -7,7 +7,7 @@ USRNAME_MAX_LEN = 255
 MIN_PASSWD_LEN = 8
 
 # Exponential factor that makes it slower to compute the hash (4 to 31).
-HASH_COST = 16
+HASH_COST = 12
 
 # Relative path to the disallowed password list in JSON format.
 DISALLOWED_PASSWORD_LIST_PATH = "server/static/PwnedPasswordsTop100k.json"

@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 
-from flask import Blueprint, request, render_template, flash, url_for, redirect
+from flask import Blueprint, request, render_template, flash, url_for, redirect, session
 from . import database as db
 from .models import User
 from sqlalchemy import exc
 from .config import USRNAME_MIN_LEN, USRNAME_MAX_LEN, MIN_PASSWD_LEN, DISALLOWED_PASSWORD_LIST_PATH, HASH_COST, HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR
 import json
-from Crypto.Protocol.KDF import bcrypt
+from Crypto.Protocol.KDF import bcrypt, bcrypt_check
 from Crypto.Hash import SHA256
 from base64 import b64encode
 
@@ -16,9 +16,17 @@ views = Blueprint("views", __name__)
 def index():
     ''' Default landing page. '''
 
-    # TODO: Display user information + extras!
+    username = None
 
-    return render_template("index.html")
+    if "user-id" in session:
+        user = User.query.filter_by(uuid = session["user-id"]).first()
+        username = user.username
+
+    context = {
+        "username": username,
+    }
+
+    return render_template("index.html", context = context)
 
 @views.route("/register", methods = ["GET", "POST"])
 def register():
@@ -55,7 +63,7 @@ def register():
                 
                 for disallowed_password in disallowed_passwords:
                     if password == disallowed_password:
-                        flash(f"Password is too common!", "error")
+                        flash("Password is too common!", "error")
                         return render_template(REGISTER_TEMPLATE), HTTP_400_BAD_REQUEST
 
         except FileNotFoundError:
@@ -66,7 +74,7 @@ def register():
             length_insensitive_password = b64encode(SHA256.new(password.encode()).digest())
             bcrypt_password_hash = bcrypt(length_insensitive_password, HASH_COST)
         except ValueError:
-            flash(f"Invalid password!", "error")
+            flash("Invalid password!", "error")
             return render_template(REGISTER_TEMPLATE), HTTP_400_BAD_REQUEST
 
         # Create the new user to add in the database.
@@ -100,12 +108,43 @@ def register():
 def login():
     ''' User log in page. '''
 
+    LOGIN_TEMPLATE = "login.html"
+    ERROR_MSG = "Incorrect username or password!"
+
     if request.method == "POST":
 
         username = request.form["username"]
         password = request.form["password"]
 
-        # TODO: Implement log in!
+        # Retrieve the user, or None if non-existent.
+        user = User.query.filter_by(username = username).first()
+
+        # Check if the username exists in the database.
+        if user is None:
+            flash(ERROR_MSG, "error")
+            return render_template(LOGIN_TEMPLATE), HTTP_400_BAD_REQUEST
+
+        try:
+            # Validate the password of the retrieved user.
+            length_insensitive_password = b64encode(SHA256.new(password.encode()).digest())
+            bcrypt_check(length_insensitive_password, user.password_hash)
+        except ValueError:
+            flash(ERROR_MSG, "error")
+            return render_template(LOGIN_TEMPLATE), HTTP_400_BAD_REQUEST
+
+        # Success, set user session.
+        session['user-id'] = user.uuid
+
+        flash(f"Logged in as: {user.username}", "success")
+        return redirect(url_for("views.index"))
 
     # Present log in form on a GET request.
     return render_template("login.html")
+
+@views.route("/logout", methods = ["GET"])
+def logout():
+    ''' Log out the user. '''
+
+    # Remove user from session if it exists.
+    session.pop('user-id', None)
+    return redirect(url_for("views.login"))

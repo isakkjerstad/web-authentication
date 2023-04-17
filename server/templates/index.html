@@ -1,7 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Welcome{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block main %}
-    <h1>Welcome!</h1>
-    <p>You are not logged in!<p>
+    {% if session['user-id'] %}
+        <h1>Welcome <span>{{ context.username }}</span>!</h1>
+    {% else %}
+        <h1>Welcome!</h1>
+        <p>You are currently not logged in!</p>
+    {% endif %}
 {% endblock %}

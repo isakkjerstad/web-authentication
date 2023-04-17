@@ -28,3 +28,5 @@ All API endpoints should return HTML documents.
 - [Flash w. Flask](https://flask.palletsprojects.com/en/2.2.x/patterns/flashing/).
 - [PwnedPasswordsTop100k](https://www.ncsc.gov.uk/static-assets/documents/PwnedPasswordsTop100k.json).
 - [Bcrypt Docs](https://pycryptodome.readthedocs.io/en/latest/src/protocol/kdf.html).
+- [Sessions in Flask](https://pythonbasics.org/flask-sessions/).
+- [View Decorators](https://flask.palletsprojects.com/en/2.2.x/patterns/viewdecorators/).

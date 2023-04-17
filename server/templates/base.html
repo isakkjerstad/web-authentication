@@ -21,8 +21,12 @@
             <div class="navbar">
                 <ul>
                     <li><a class="{{ 'active' if active_page is not defined else 'inactive' }}" href="/">Home</a></li>
-                    <li><a class="{{ 'active' if active_page == 'login' else 'inactive' }}" href="/login">Log In</a></li>
-                    <li><a class="{{ 'active' if active_page == 'register' else 'inactive' }}" href="/register">Register</a></li>
+                    {% if session['user-id'] %}
+                        <li><a class="{{ 'active' if active_page == 'logout' else 'inactive' }}" href="/logout">Log Out</a></li>
+                    {% else %}
+                        <li><a class="{{ 'active' if active_page == 'login' else 'inactive' }}" href="/login">Log In</a></li>
+                        <li><a class="{{ 'active' if active_page == 'register' else 'inactive' }}" href="/register">Register</a></li>
+                    {% endif %}
                 </ul>
             </div>
 

@@ -39,9 +39,13 @@ def create_database(web_app):
 
 def delete_database():
     ''' Deletes the database if it exists. '''
-
-    database_path = "instance/" + DATABASE_NAME
     
-    if path.exists(database_path):
-        remove(database_path)
+    # Newer versions of flask.
+    if path.exists("instance/" + DATABASE_NAME):
+        remove("instance/" + DATABASE_NAME)
+        print(" * Database deleted!")
+
+    # Old versions of flask (not supported).
+    elif path.exists(__name__ + "/" + DATABASE_NAME):
+        remove(__name__ + "/" + DATABASE_NAME)
         print(" * Database deleted!")

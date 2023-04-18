@@ -2,7 +2,7 @@
 
 from flask import Blueprint, request, render_template, flash, url_for, redirect, session
 from . import database as db
-from .models import User
+from .models import User, SensorData
 from sqlalchemy import exc
 from .config import USRNAME_MIN_LEN, USRNAME_MAX_LEN, MIN_PASSWD_LEN, DISALLOWED_PASSWORD_LIST_PATH, HASH_COST, HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR
 import json
@@ -164,3 +164,30 @@ def logout():
     # Remove user from session if it exists.
     session.pop('user-id', None)
     return redirect(url_for("views.login"))
+
+@views.route("/api/sensors/submit-bme680-sensor-data", methods=["POST"])
+def submit_bme680_sensor_data():
+    ''' Store sensor data for a Bosch BME680 sensor. '''
+
+    SUCCESS_CODE = 201
+
+    data = request.get_json()
+
+    print(data)
+
+    data_point = SensorData(
+        location = "test",
+        temperature = 0,
+        pressure = 0,
+        humidity = 0,
+        gas_resistance = 0,
+    )
+
+    try:
+        db.session.add(data_point)
+        db.session.commit()
+    except exc.SQLAlchemyError:
+        db.session.rollback()
+        return "", HTTP_400_BAD_REQUEST
+
+    return "", SUCCESS_CODE

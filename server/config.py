@@ -12,9 +12,13 @@ HASH_COST = 12
 # Relative path to the disallowed password list in JSON format.
 DISALLOWED_PASSWORD_LIST_PATH = "server/static/PwnedPasswordsTop100k.json"
 
+# Server API key.
+API_KEY = "36!fs@s63gc%"
+
 # Debug server settings.
 DEBUG = True
 THREADED = True
+HOST = "localhost"
 PORT = 8080
 
 # HTTP error codes.

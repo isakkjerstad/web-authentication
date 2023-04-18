@@ -14,5 +14,6 @@ if __name__ == "__main__":
     debug_server.run(
         debug = config.DEBUG,
         port = config.PORT,
-        threaded = config.THREADED
+        threaded = config.THREADED,
+        host = config.HOST,
     )

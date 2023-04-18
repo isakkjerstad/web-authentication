@@ -4,7 +4,7 @@ from flask import Blueprint, request, render_template, flash, url_for, redirect,
 from . import database as db
 from .models import User, SensorData
 from sqlalchemy import exc
-from .config import USRNAME_MIN_LEN, USRNAME_MAX_LEN, MIN_PASSWD_LEN, DISALLOWED_PASSWORD_LIST_PATH, HASH_COST, HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR
+from .config import USRNAME_MIN_LEN, USRNAME_MAX_LEN, MIN_PASSWD_LEN, DISALLOWED_PASSWORD_LIST_PATH, HASH_COST, API_KEY, HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR
 import json
 from Crypto.Protocol.KDF import bcrypt, bcrypt_check
 from Crypto.Hash import SHA256
@@ -170,20 +170,39 @@ def submit_bme680_sensor_data():
     ''' Store sensor data for a Bosch BME680 sensor. '''
 
     SUCCESS_CODE = 201
+    UNAUTHORIZED = 401
 
+    # Expect JSON data only.
     data = request.get_json()
+    if data is None:
+        return "", HTTP_400_BAD_REQUEST
 
-    print(data)
+    try:
+        # Get data from the sensor.
+        api_key = data["api_key"]
+        location = data["location"]
+        temperature = data["temperature"]
+        pressure = data["pressure"]
+        humidity = data["humidity"]
+        gas_resistance = data["gas_resistance"]
+    except:
+        return "", HTTP_400_BAD_REQUEST
 
+    # Validate API key.
+    if api_key != API_KEY:
+        return "", UNAUTHORIZED
+
+    # Create a new data point.
     data_point = SensorData(
-        location = "test",
-        temperature = 0,
-        pressure = 0,
-        humidity = 0,
-        gas_resistance = 0,
+        location = location,
+        temperature = temperature,
+        pressure = pressure,
+        humidity = humidity,
+        gas_resistance = gas_resistance,
     )
 
     try:
+        # Store the data.
         db.session.add(data_point)
         db.session.commit()
     except exc.SQLAlchemyError:

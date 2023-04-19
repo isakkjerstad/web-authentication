@@ -21,4 +21,4 @@ class SensorData(db.Model):
     temperature = db.Column(db.Float, nullable = False)
     pressure = db.Column(db.Float, nullable = False)
     humidity = db.Column(db.Float, nullable = False)
-    tvoc = db.Column(db.Float, nullable = False)
+    aqi = db.Column(db.Float, nullable = False)

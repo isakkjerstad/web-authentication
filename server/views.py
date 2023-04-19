@@ -184,7 +184,7 @@ def submit_bme680_sensor_data():
         temperature = data["temperature"]
         pressure = data["pressure"]
         humidity = data["humidity"]
-        tvoc = data["tvoc"]
+        aqi = data["aqi"]
     except:
         return "", HTTP_400_BAD_REQUEST
 
@@ -198,7 +198,7 @@ def submit_bme680_sensor_data():
         temperature = temperature,
         pressure = pressure,
         humidity = humidity,
-        tvoc = tvoc,
+        aqi = aqi,
     )
 
     try:

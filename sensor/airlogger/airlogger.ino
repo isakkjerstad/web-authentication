@@ -13,7 +13,7 @@
 #define WIFI_LED_PIN 13
 
 // POST data with a given delay.
-unsigned long ms_delay = 60000;
+unsigned long ms_delay = 30000;
 
 // Sensor settings.
 const char *ssid = "<NETWORK-NAME>";
@@ -99,21 +99,18 @@ void loop() {
             client.setTimeout(5000);
             http.begin(client, api);
 
+            // Process sensor data.
+            float pressure_hPa = sensor.pressure / 100.0;
+            float aqi_factor = log(sensor.gas_resistance) + 0.04 * sensor.humidity;
+
             // Convert float values to strings.
             String temperature = String(sensor.temperature);
-            String pressure = String(sensor.pressure);
+            String pressure = String(pressure_hPa);
             String humidity = String(sensor.humidity);
-            String gas_resistance = String(sensor.gas_resistance);
+            String aqi = String(aqi_factor);
 
             // Create the JSON object.
-            String json_data = "{
-                \"api_key\":\"" + api_key + "\",
-                \"location\":\"" + location + "\",
-                \"temperature\":\"" + temperature + "\",
-                \"pressure\":\"" + pressure + "\",
-                \"humidity\":\"" + humidity + "\",
-                \"tvoc\":\"" + tvoc + "\"
-            }";
+            String json_data = "{\"api_key\":\"" + api_key + "\",\"location\":\"" + location + "\",\"temperature\":\"" + temperature + "\",\"pressure\":\"" + pressure + "\",\"humidity\":\"" + humidity + "\",\"aqi\":\"" + aqi + "\"}";
 
             // Output JSON to the terminal.
             Serial.println(json_data);

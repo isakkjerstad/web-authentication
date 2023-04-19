@@ -10,6 +10,19 @@ body {
     flex-direction: column;
 }
 
+.graph {
+    border-width: 1px;
+    border-style: solid;
+    margin: 50px;
+}
+
+.graph #myChart {
+    max-width: 100%;
+    width: 800px;
+    height: 400px;
+    padding: 20px;
+}
+
 .flash-error {
     width: 400px;
     font-size: 60%;

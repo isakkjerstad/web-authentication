@@ -8,4 +8,47 @@
         <h1>Welcome!</h1>
         <p>You are currently not logged in!</p>
     {% endif %}
+
+    <!-- Display graph only to users. -->
+    {% if session['user-id'] %}
+        <div class="graph">
+            <canvas id="myChart"></canvas>
+        </div>
+        <script>
+            let myChart = document.getElementById("myChart").getContext("2d");
+            let lineChart = new Chart(myChart, {
+                type: "line",
+                options: {
+                    scales: {
+                        x: {
+                            type: 'linear',
+                        },
+                    },
+                },
+                data: {
+                    datasets: [{
+                        label: "A013",
+                        data: [
+                            {% for y in context.a013_aqi_values %}
+                                {
+                                    x: {{ y[0] }},
+                                    y: {{ y[1] }}
+                                },
+                            {% endfor %}
+                        ]
+                    }, {
+                        label: "A055",
+                        data: [
+                            {% for y in context.a055_aqi_values %}
+                                {
+                                    x: {{ y[0] }},
+                                    y: {{ y[1] }}
+                                },
+                            {% endfor %}
+                        ]
+                    }]
+                },
+            });
+        </script>
+    {% endif %}
 {% endblock %}

@@ -19,12 +19,34 @@ def index():
 
     username = None
 
+    a013_aqi_values = []
+    a055_aqi_values = []
+
+    # Check if a user is logged in.
     if "user-id" in session:
         user = User.query.filter_by(uuid = session["user-id"]).first()
+
+        # User deleted, log it out as well.
+        if user is None:
+            return redirect(url_for("views.logout"))
+
+        # Get current username.
         username = user.username
+
+        # Retrieve sensor data from the database.
+        a013_data = SensorData.query.filter_by(location = "A013").all()
+        a055_data = SensorData.query.filter_by(location = "A055").all()
+
+        for point in a013_data:
+            a013_aqi_values.append((point.id, point.aqi))
+
+        for point in a055_data:
+            a055_aqi_values.append((point.id, point.aqi))
 
     context = {
         "username": username,
+        "a013_aqi_values": a013_aqi_values,
+        "a055_aqi_values": a055_aqi_values,
     }
 
     return render_template("index.html", context = context)

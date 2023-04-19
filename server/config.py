@@ -13,7 +13,7 @@ HASH_COST = 12
 DISALLOWED_PASSWORD_LIST_PATH = "server/static/PwnedPasswordsTop100k.json"
 
 # Server API key.
-API_KEY = "36!fs@s63gc%"
+API_KEY = "<API-KEY>"
 
 # Debug server settings.
 DEBUG = True

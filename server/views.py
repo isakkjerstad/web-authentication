@@ -51,11 +51,14 @@ def index():
             for point in a055_data:
                 a055_aqi_values.append((point.id, point.aqi))
 
-            # Get the name of the best room.
-            if a013_data[-1].aqi < a055_data[-1].aqi:
-                best_room = "A013"
-            else:
-                best_room = "A055"
+            try:
+                # Get the name of the best room.
+                if a013_data[-1].aqi < a055_data[-1].aqi:
+                    best_room = "A013"
+                else:
+                    best_room = "A055"
+            except IndexError:
+                best_room = "NO DATA!"
 
     context = {
         "username": username,

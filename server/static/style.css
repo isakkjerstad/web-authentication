@@ -23,6 +23,10 @@ body {
     padding: 20px;
 }
 
+.info {
+    text-align: center;
+}
+
 .flash-error {
     width: 400px;
     font-size: 60%;
@@ -32,6 +36,7 @@ body {
     padding: 15px;
     box-shadow: 0px 0px 20px 12px #171717;
     margin-bottom: 20px;
+    max-width: 100%;
 }
 
 .flash-success {
@@ -43,6 +48,7 @@ body {
     padding: 15px;
     box-shadow: 0px 0px 20px 12px #171717;
     margin-bottom: 20px;
+    max-width: 100%;
 }
 
 .auto-hide {
@@ -59,6 +65,7 @@ body {
     box-shadow: 0px 0px 20px 12px #171717;
     border-style: solid;
     border-width: 1px;
+    max-width: 100%;
 }
 
 .forms label {

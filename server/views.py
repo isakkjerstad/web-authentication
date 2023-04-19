@@ -10,17 +10,20 @@ from Crypto.Protocol.KDF import bcrypt, bcrypt_check
 from Crypto.Hash import SHA256
 from base64 import b64encode
 from werkzeug.exceptions import BadRequestKeyError
+import datetime
 
 views = Blueprint("views", __name__)
 
 @views.route("/", methods = ["GET"])
 def index():
-    ''' Default landing page. '''
+    ''' Default landing page. Display air quality data. '''
 
     username = None
 
+    # Used for plotting.
     a013_aqi_values = []
     a055_aqi_values = []
+    best_room = ""
 
     # Check if a user is logged in.
     if "user-id" in session:
@@ -33,20 +36,32 @@ def index():
         # Get current username.
         username = user.username
 
-        # Retrieve sensor data from the database.
-        a013_data = SensorData.query.filter_by(location = "A013").all()
-        a055_data = SensorData.query.filter_by(location = "A055").all()
+        # Get entries for the last 24 hours.
+        time_window = datetime.datetime.utcnow() - datetime.timedelta(hours = 24)
 
-        for point in a013_data:
-            a013_aqi_values.append((point.id, point.aqi))
+        # Retrieve sensor data from the database within the time window.
+        a013_data = SensorData.query.filter_by(location = "A013").filter(SensorData.time > time_window).all()
+        a055_data = SensorData.query.filter_by(location = "A055").filter(SensorData.time > time_window).all()
 
-        for point in a055_data:
-            a055_aqi_values.append((point.id, point.aqi))
+        if (a013_data is not None) and (a055_data is not None):
+
+            for point in a013_data:
+                a013_aqi_values.append((point.id, point.aqi))
+
+            for point in a055_data:
+                a055_aqi_values.append((point.id, point.aqi))
+
+            # Get the name of the best room.
+            if a013_data[-1].aqi < a055_data[-1].aqi:
+                best_room = "A013"
+            else:
+                best_room = "A055"
 
     context = {
         "username": username,
         "a013_aqi_values": a013_aqi_values,
         "a055_aqi_values": a055_aqi_values,
+        "best_room": best_room,
     }
 
     return render_template("index.html", context = context)

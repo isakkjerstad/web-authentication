@@ -11,6 +11,10 @@
 
     <!-- Display graph only to users. -->
     {% if session['user-id'] %}
+        <div class="info">
+            <h2>The best room is currently: {{ context.best_room }}</h2>
+        </div>
+
         <div class="graph">
             <canvas id="myChart"></canvas>
         </div>
@@ -19,9 +23,20 @@
             let lineChart = new Chart(myChart, {
                 type: "line",
                 options: {
+                    events: [],
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'AIR QUALITY (LAST 24H)',
+                        },
+                    },
                     scales: {
                         x: {
                             type: 'linear',
+                            display: false,
+                        },
+                        y: {
+                            display: false,
                         },
                     },
                 },
@@ -32,7 +47,7 @@
                             {% for y in context.a013_aqi_values %}
                                 {
                                     x: {{ y[0] }},
-                                    y: {{ y[1] }}
+                                    y: {{ y[1] }},
                                 },
                             {% endfor %}
                         ]
@@ -42,11 +57,11 @@
                             {% for y in context.a055_aqi_values %}
                                 {
                                     x: {{ y[0] }},
-                                    y: {{ y[1] }}
+                                    y: {{ y[1] }},
                                 },
                             {% endfor %}
-                        ]
-                    }]
+                        ],
+                    }],
                 },
             });
         </script>

@@ -16,4 +16,5 @@ if __name__ == "__main__":
         port = config.PORT,
         threaded = config.THREADED,
         host = config.HOST,
+        ssl_context = "adhoc",
     )

@@ -59,24 +59,38 @@ sudo nano /etc/nginx/sites-enabled/reverse-proxy.conf
 
 <####################### reverse-proxy.conf #########################>
 server {
-    listen 80;
-    listen [::]:80;
-    server_name ikj023.csano.no;
-
-    return 302 https://$server_name$request_uri;
-}
-
-server {
     listen 443 ssl;
     listen [::]:443 ssl;
+
     ssl_certificate /etc/letsencrypt/live/ikj023.csano.no/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/ikj023.csano.no/privkey.pem;
 
     location / {
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header HOST $http_host;
-                proxy_pass http://127.0.0.1:8000;
-                proxy_redirect off;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header HOST $http_host;
+        proxy_pass http://127.0.0.1:8000;
+        proxy_redirect off;
+    }
+
+    location /api/sensors/submit-bme680-sensor-data {
+        return 302 http://$server_name$request_uri;
+    }
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name ikj023.csano.no;
+
+    location / {
+        return 302 https://$server_name$request_uri;
+    }
+
+    location /api/sensors/submit-bme680-sensor-data {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header HOST $http_host;
+        proxy_pass http://127.0.0.1:8000;
+        proxy_redirect off;
     }
 }
 <####################################################################>

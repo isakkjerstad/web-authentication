@@ -53,7 +53,7 @@ def index():
 
             try:
                 # Get the name of the best room.
-                if a013_data[-1].aqi < a055_data[-1].aqi:
+                if a013_data[-1].aqi >= a055_data[-1].aqi:
                     best_room = "A013"
                 else:
                     best_room = "A055"

@@ -1,12 +1,16 @@
 # Web Authentication:
 Assignment four in INF-2310 Computer Security.
+## User guide:
+- Run the debug server: ``` ./runserver.py ```
+- Run the debug server and reset the database: ``` ./runserver.py -r ``` or ``` ./runserver.py --reset ```
+- Deploy: follow the ``` deploy.txt ``` guide.
 ## Requirements:
 The server should display a greeting message to authenticated users.
 In addition the following requirements must be achieved:
 - User credentials must be stored in a persistent file on disk.
 - Protection against network-based replay attacks and network snooping.
 - Stored passwords must be resilient to dictionary attacks.
-- Log authentication requests.
+- Log authentication requests (*OPT).
 ## Endpoints:
 - "/" (GET) - welcome message, username of a logged-in user, a link to the register and login page.
 - "/register" (GET, POST) - form for adding new users, username and password w. verification + errors.

@@ -1,0 +1,181 @@
+body {
+    color: #E2E2E2;
+    background-color: #292929;
+    font-family: sans-serif;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.graph {
+    border-width: 1px;
+    border-style: solid;
+    margin: 50px;
+}
+
+.graph #myChart {
+    max-width: 100%;
+    width: 800px;
+    height: 400px;
+    padding: 20px;
+}
+
+.info {
+    text-align: center;
+}
+
+.flash-error {
+    width: 400px;
+    font-size: 60%;
+    text-align: center;
+    background-color: #B00020;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0px 0px 20px 12px #171717;
+    margin-bottom: 20px;
+    max-width: 100%;
+}
+
+.flash-success {
+    width: 400px;
+    font-size: 60%;
+    text-align: center;
+    background-color: #068c6b;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0px 0px 20px 12px #171717;
+    margin-bottom: 20px;
+    max-width: 100%;
+}
+
+.auto-hide {
+    animation: fade 3s forwards, hide 0s forwards;
+    animation-delay: 7s, 10s;
+}
+
+.forms {
+    width: 400px;
+    text-align: center;
+    background-color: #121212;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0px 0px 20px 12px #171717;
+    border-style: solid;
+    border-width: 1px;
+    max-width: 100%;
+}
+
+.forms label {
+    width: 82%;
+    display: block;
+    text-align: left;
+    margin: auto;
+    margin-bottom: 2px;
+}
+
+.forms input {
+    width: 80%;
+    height: 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #FFFFFF;
+    text-indent: 5px;
+}
+
+.forms input:focus{
+    outline: none;
+}
+
+.forms #submit {
+    margin-top: 15px;
+    color: #E2E2E2;
+    font-weight: bold;
+    font-size: 100%;
+    background-color: #6106EE;
+    border-radius: 10px;
+    height: 40px;
+    width: 50%;
+}
+
+h1 span {
+    animation: rainbow 5s infinite;
+    font-family: cursive;
+    font-size: 110%;
+}
+
+@keyframes rainbow {
+    0%	    {
+        color: #FE0E00;
+    }
+
+    25%	    {
+        color: #FEF900;
+    }
+
+    50%    {
+        color: #1B8D00;
+    }
+
+    75%    {
+        color: #0025B5;
+    }
+
+    100%    {
+        color: #FE0E00;
+    }
+}
+
+@keyframes fade {
+    0%      { opacity: 1; }
+    100%    { opacity: 0; }
+}
+
+@keyframes hide {
+    to {
+        visibility: hidden;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+        width: 0;
+        height: 0;
+    }
+}
+
+/* Navbar styling inspired by the following source (14.04.23):
+ * https://www.w3schools.com/css/css_navbar_horizontal.asp
+*/
+
+.navbar {
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar li {
+    float: left;
+    border: 1px solid #E2E2E2;
+}
+
+.navbar li a {
+    color: #E2E2E2;
+    display: block;
+    padding: 14px 16px;
+    text-decoration: none;
+    text-align: center;
+}
+
+.navbar .active {
+    background-color: #BB86FC;
+}
+
+.navbar li a:hover:not(.active) {
+    background-color: #131212;
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <!-- Site wide metadata. -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Assignment four in INF-2310 Computer Security at UiT.">
+        <meta name="author" content="Isak Kjerstad">
+
+        <!-- Dynamic site title. -->
+        <title>{% block title %}{% endblock %}</title>
+        
+        <!-- Load static resources. -->
+        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.umd.js"></script>
+    </head>
+    <body>
+        <div class="center">
+
+            <!-- Navigation bar. -->
+            <div class="navbar">
+                <ul>
+                    <li><a class="{{ 'active' if active_page is not defined else 'inactive' }}" href="/">Home</a></li>
+                    {% if session['user-id'] %}
+                        <li><a class="{{ 'active' if active_page == 'logout' else 'inactive' }}" href="/logout">Log Out</a></li>
+                    {% else %}
+                        <li><a class="{{ 'active' if active_page == 'login' else 'inactive' }}" href="/login">Log In</a></li>
+                        <li><a class="{{ 'active' if active_page == 'register' else 'inactive' }}" href="/register">Register</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <!-- Flashed messages (class flash-error/flash-success). -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-{{ category }} auto-hide">
+                            <h1>{{ message }}</h1>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- Extend base with content in main. -->
+            {% block main %}{% endblock %}
+            
+        </div>
+    </body>
+</html>

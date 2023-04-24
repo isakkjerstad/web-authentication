@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% set active_page = "register" %}
+
+{% block main %}
+    <div class="forms">
+        <h1>Register</h1>
+        <form action="/register" method="POST" autocomplete="off">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter a new username ...">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter a new password ...">
+            <label for="confirm-password">Confirm password:</label>
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your new password ...">
+            <input type="submit" id="submit" value="REGISTER">
+        </form>
+    </div>
+{% endblock %}

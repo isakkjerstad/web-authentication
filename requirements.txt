@@ -1,0 +1,8 @@
+##### --------------------------------------------- #####
+#####                 REQUIREMENTS                  #####
+##### Install with: pip install -r requirements.txt #####
+##### --------------------------------------------- #####
+
+flask >= 2.2.3
+flask_sqlalchemy >= 3.0.3
+pycryptodome >= 3.17

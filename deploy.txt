@@ -1,0 +1,105 @@
+# Install prerequisites:
+sudo apt update
+sudo apt upgrade -y
+sudo apt install nginx python3 python3-pip gunicorn
+
+# Restrict port 8000 so only NGINX can access Gunicorn:
+sudo iptables -A INPUT -p tcp --destination-port 8000 -j DROP
+
+# Get the project:
+cd /var/www/
+sudo git clone https://github.com/isakkjerstad/web-authentication.git
+cd web-authentication/
+sudo pip3 install -r requirements.txt
+
+# Configure server settings:
+sudo nano server/config.py
+
+# Run the server by typing (exit with CTRL-C):
+sudo gunicorn -w 2 -b 127.0.0.1:8000 "server:create_web_app()"
+
+# Enable auto-startup on boot:
+sudo nano /lib/systemd/system/flask.service
+
+<######################### flask.service ############################>
+[Unit]
+Description=Flask Application
+After=network.target
+After=systemd-user-sessions.service
+After=network-online.target
+
+[Service]
+User=root
+Type=simple
+ExecStart=/var/www/web-authentication/start.sh
+TimeoutSec=30
+Restart=on-failure
+RestartSec=15
+StartLimitInterval=350
+StartLimitBurst=10
+
+[Install]
+WantedBy=multi-user.target
+<####################################################################>
+
+sudo nano /var/www/web-authentication/start.sh
+
+<############################ start.sh ##############################>
+#!/bin/bash
+cd /var/www/web-authentication/
+gunicorn -w 2 -b 127.0.0.1:8000 "server:create_web_app()"
+<####################################################################>
+
+sudo chmod +x /var/www/web-authentication/start.sh
+sudo systemctl enable flask
+
+# Set up a reverse proxy with NGINX:
+sudo rm /etc/nginx/sites-enabled/default
+sudo nano /etc/nginx/sites-enabled/reverse-proxy.conf
+
+<####################### reverse-proxy.conf #########################>
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    ssl_certificate /etc/letsencrypt/live/ikj023.csano.no/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ikj023.csano.no/privkey.pem;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header HOST $http_host;
+        proxy_pass http://127.0.0.1:8000;
+        proxy_redirect off;
+    }
+
+    location /api/sensors/submit-bme680-sensor-data {
+        return 302 http://$server_name$request_uri;
+    }
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name ikj023.csano.no;
+
+    location / {
+        return 302 https://$server_name$request_uri;
+    }
+
+    location /api/sensors/submit-bme680-sensor-data {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header HOST $http_host;
+        proxy_pass http://127.0.0.1:8000;
+        proxy_redirect off;
+    }
+}
+<####################################################################>
+
+# Get a certificate with Certbot:
+sudo snap install core; sudo snap refresh core
+sudo apt-get remove certbot
+sudo snap install --classic certbot
+sudo certbot certonly --nginx
+
+# Add certificates to the reverse-proxy.conf file and run:
+sudo systemctl restart nginx

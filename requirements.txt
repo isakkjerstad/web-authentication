@@ -6,3 +6,4 @@
 flask >= 2.2.3
 flask_sqlalchemy >= 3.0.3
 pycryptodome >= 3.17
+pyopenssl >= 23.3.0
